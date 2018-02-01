@@ -1,16 +1,22 @@
 package pl.project.encryption;
 
-public interface EncryptionInterface {
+//W przypadku interfejsu modyfikatory public są zbędne - metody interfejsu zawsze są publiczne. 
 
-	public boolean encryptionFlag = false;
+interface EncryptionInterface {
 
-	final char[] alphabet = "aąbcćdeęfghijklłmnńoópqrsśtuvwxyzźż".toCharArray();
-	final int alphaLen = alphabet.length;
+	boolean encryptionFlag = false;
+	
+	//Jeśli zaś chodzi o stałe takie jak alfabet można je oznaczyć jako static final 
+	//(wtedy inicjowane są tylko raz w ciągu trwania całej aplikacji). 
+	//Zwyczajowo takie stałe pisze się z dużych liter, np. ALPHABET albo ALPHA_LEN.
 
-	public boolean isEncryptionFlag();
+	final static char[] ALPHABET = "aąbcćdeęfghijklłmnńoópqrsśtuvwxyzźż".toCharArray();
+	final static int ALPHA_LEN = ALPHABET.length;
 
-	public void setEncryptionFlag(boolean encryptionFlag);
+	boolean isEncryptionFlag();
 
-	public char[] makeEncryption(char[] msgToProcess);
+	void setEncryptionFlag(boolean encryptionFlag);
+
+	char[] makeEncryption(char[] msgToProcess);
 
 }

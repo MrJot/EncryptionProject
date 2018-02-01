@@ -41,15 +41,15 @@ public class CaesarCipher implements EncryptionInterface {
 		int shift = -1;
 		char[] returnArray = new char[msgToEncrypt.length];
 		for (int i = 0; i < msgToEncrypt.length; i++) {
-			for (int j = 0; j < alphaLen; j++) {
+			for (int j = 0; j < ALPHA_LEN; j++) {
 				if (Character.isLetter(msgToEncrypt[i])) {
-					if (msgToEncrypt[i] == alphabet[j]) {
+					if (msgToEncrypt[i] == ALPHABET[j]) {
 						if (isEncryptionFlag()) {
-							shift = (code + j) % alphaLen;
+							shift = (code + j) % ALPHA_LEN;
 						} else {
-							shift = (j - (code % alphaLen) + alphaLen) % alphaLen;
+							shift = (j - (code % ALPHA_LEN) + ALPHA_LEN) % ALPHA_LEN;
 						}
-						returnArray[i] = alphabet[shift];
+						returnArray[i] = ALPHABET[shift];
 					}
 				} else {
 					returnArray[i] = msgToEncrypt[i];

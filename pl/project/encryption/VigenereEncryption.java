@@ -77,20 +77,20 @@ public class VigenereEncryption implements EncryptionInterface {
 		int[] psswdArrayId = new int[msgLength];
 		int[] revPasswordArrayId = new int[msgLength];
 		for (int i = 0; i < msgLength; i++) {
-			for (int j = 0; j < alphaLen; j++) {
-				if (msgToEncrypt[i] == alphabet[j]) {
+			for (int j = 0; j < ALPHA_LEN; j++) {
+				if (msgToEncrypt[i] == ALPHABET[j]) {
 					mesToEncryptId[i] = j;
 				}
-				if (passwordArray[i] == alphabet[j]) {
+				if (passwordArray[i] == ALPHABET[j]) {
 					psswdArrayId[i] = j;
-					revPasswordArrayId[i] = (alphaLen - j) % alphaLen;
+					revPasswordArrayId[i] = (ALPHA_LEN - j) % ALPHA_LEN;
 				}
 			}
 			if (Character.isLetter(passwordArray[i])) {
 				if (this.encryptionFlag) {
-					encrypterTable[i] = alphabet[(mesToEncryptId[i] + psswdArrayId[i]) % alphaLen];
+					encrypterTable[i] = ALPHABET[(mesToEncryptId[i] + psswdArrayId[i]) % ALPHA_LEN];
 				} else {
-					encrypterTable[i] = alphabet[(mesToEncryptId[i] + revPasswordArrayId[i]) % alphaLen];
+					encrypterTable[i] = ALPHABET[(mesToEncryptId[i] + revPasswordArrayId[i]) % ALPHA_LEN];
 				}
 
 			} else {
