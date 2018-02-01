@@ -33,9 +33,44 @@ public class CaesarCipher implements EncryptionInterface {
 	 * Funtion provides encryption/decryption using Casear method
 	 * 
 	 * @param char[] (small letters only)
+	 * @return 
 	 * @return char[] (returns encrypted/decrypted [] )
 	 */
 
+	
+	private boolean letterMatch(char i, char k) {
+		boolean status=false;
+		if(Character.isLetter(i)) {
+			if(i==k) {
+				status=true;
+			}else {
+				status=false;
+			}
+		}
+		return status;
+	}
+	
+
+
+	
+	public char[] makeEncryption(char[] msgToEncrypt) {
+		int code = getCode();
+		int shift = -1;
+		char[] returnArray = new char[msgToEncrypt.length];
+		for (int i = 0; i < msgToEncrypt.length; i++) {
+			for (int j = 0; j < ALPHA_LEN; j++) {
+				if(letterMatch(msgToEncrypt[i], ALPHABET[j])) {
+					
+				}
+					
+				}
+			}
+	
+	
+	}
+	
+	
+	/*
 	public char[] makeEncryption(char[] msgToEncrypt) {
 		int code = getCode();
 		int shift = -1;
@@ -59,6 +94,6 @@ public class CaesarCipher implements EncryptionInterface {
 
 		return returnArray;
 
-	}
+	}*/
 
 }

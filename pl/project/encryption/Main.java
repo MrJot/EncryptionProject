@@ -241,6 +241,8 @@ public class Main {
 	public static void main(String[] args) {
 		Main newTask = new Main();
 		newTask.run();
+		Runnable r2 = () -> System.out.println("Hello world two!");
+		r2.run();
 	}
 
 }
