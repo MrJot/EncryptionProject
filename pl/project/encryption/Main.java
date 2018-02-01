@@ -4,12 +4,15 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class Main {
+	
+	StringConversion newConversion = new StringConversion();
 
 	private int status; // user input switch status
 	private char[] convertedMessage;// removed upper case, remember index position
 	private String msg; // raw String message predefined by the user
-	private char[] encMessage; // encoded/decoded char []
-	private String encodedMessage; // converted encoded/decoded message to String, restore upper letters)
+	private String encMessage; // encoded/decoded char []
+	// private String encodedMessage; // converted encoded/decoded message to
+	// String, restore upper letters)
 
 	// GETTERS AND SETTERS
 
@@ -29,31 +32,30 @@ public class Main {
 		this.msg = msg;
 	}
 
-	public char[] getEncMessage() {
+	public String getEncMessage() {
 		return encMessage;
 	}
 
 	public void setEncMessage(char[] encMessage) {
-		this.encMessage = encMessage;
+		this.encMessage = newConversion.toUpperCase(encMessage);
 	}
 
-	public String getEncodedMessage() {
-		return encodedMessage;
-	}
-
-	public void setEncodedMessage(String encodedMessage) {
-		this.encodedMessage = encodedMessage;
-	}
+	/*
+	 * public String getEncodedMessage() { return encodedMessage; }
+	 * 
+	 * public void setEncodedMessage(String encodedMessage) { this.encodedMessage =
+	 * encodedMessage; }
+	 */
 
 	public char[] getConvertedMessage() {
 		return convertedMessage;
 	}
 
-	public void setConvertedMessage(char[] convertedMessage) {
-		this.convertedMessage = convertedMessage;
+	public void setConvertedMessage(String convertedMessage) {
+		newConversion.toLowerCase(getMsg());
+		this.convertedMessage = newConversion.getMessageToCipher();
 	}
-	
-	
+
 	/**
 	 * Welcome message
 	 */
@@ -61,17 +63,15 @@ public class Main {
 		System.out.println("Welcome to BetaCipher. This simple app will encrypt/decrypt your messages\n"
 				+ "using two different methods: Caesar Cipher or Vigenere Cipher.\n\n");
 	}
-	
-	
+
 	/**
-	 * Select source of encoded/decoded message
-	 * case 1 - Keyboard input
-	 * case 2 - Text file
+	 * Select source of encoded/decoded message case 1 - Keyboard input case 2 -
+	 * Text file
 	 */
-	
+
 	public void selectInputMethod() {
 		Scanner scan = new Scanner(System.in);
-		//Main newSubmission = new Main();
+		// Main newSubmission = new Main();
 		System.out.println("Select your input data definition\n[1] - Keybord entry\n[2] - Text file");
 		try {
 			setStatus(Integer.parseInt(scan.next()));
@@ -83,19 +83,20 @@ public class Main {
 		case 1:
 			System.out.println("Type message for encryption/decryption:");
 			setMsg(scan.nextLine());
+			setConvertedMessage(getMsg());
 			break;
 		case 2:
 			setMsg(new ReadWriteInputFile().usingBufferedReader());
+			setConvertedMessage(getMsg());
 			break;
 		default:
 			System.out.println("You have 'literally two options: '1' or '2' ");
 			System.out.println("Try again");
 			selectInputMethod();
 		}
-		
+
 	}
-	
-	
+
 	/**
 	 * Select encryption method
 	 */
@@ -108,66 +109,66 @@ public class Main {
 		} catch (NumberFormatException e) {
 			System.out.println("This is not valid number");
 		}
-		switch(getStatus()){
+		switch (getStatus()) {
 		case 1:
 			newTask = new CaesarCipher(selectOperation());
 			System.out.println("Type a passoward for encryption/decryption (integers > 0 ONLY)");
 			boolean loopBool = false;
-			while(!loopBool) {
+			while (!loopBool) {
 				try {
-					((CaesarCipher)newTask).setCode(Integer.parseInt(scan.nextLine()));
-					if(((CaesarCipher)newTask).getCode()<0) {
+					((CaesarCipher) newTask).setCode(Integer.parseInt(scan.nextLine()));
+					if (((CaesarCipher) newTask).getCode() < 0) {
 						System.out.println("Your number should be POSITIVE\nRetype your password:");
-					}else  {
-						loopBool=true;	
+					} else {
+						loopBool = true;
 					}
 				} catch (NumberFormatException e) {
-					System.out.println("This is Casear Cipher. You can encode/decode you message\nusing ONLY numerical passoword\nType a positive integer number:");
+					System.out.println(
+							"This is Casear Cipher. You can encode/decode you message\nusing ONLY numerical passoword\nType a positive integer number:");
 				}
 			}
 			setEncMessage(((CaesarCipher) newTask).makeEncryption(getConvertedMessage()));
 			break;
-			
+
 		case 2:
 			newTask = new VigenereEncryption(selectOperation());
 			System.out.println("Type a passoward for encryption/decryption (low letters ONLY)");
-			loopBool=false;
-			String password="";
-			while(!loopBool) {
+			loopBool = false;
+			String password = "";
+			while (!loopBool) {
 				password = scan.nextLine();
-				for(char e:password.toCharArray()) {
-					if(Character.isLowerCase(e)==false){
+				for (char e : password.toCharArray()) {
+					if (Character.isLowerCase(e) == false) {
 						System.out.println("Invalid password");
-						loopBool=false;
+						loopBool = false;
 						System.out.println("Retype your password:");
 						break;
-					}else {
-						loopBool=true;
+					} else {
+						loopBool = true;
 					}
 				}
-				
-			
-		}
-			
+
+			}
+
 			((VigenereEncryption) newTask).psswdPreparation(password, getConvertedMessage());
 			setEncMessage(((VigenereEncryption) newTask).makeEncryption(getConvertedMessage()));
 			break;
-		default:
+			default:
 			System.out.println("You have 'literally two options: '1' or '2' ");
 			System.out.println("Try again");
 			selectEncryptionMethod();
-			
+
 		}
-		
+
 	}
-	
-	
+
 	/**
 	 * Sets if message should be encrypted/decrypted
+	 * 
 	 * @return encryption status
 	 */
 	public boolean selectOperation() {
-		boolean status=true;
+		boolean status = true;
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Would you like to:\n[1]-Encrypt your message\n[2]-Decrypt your message");
 		try {
@@ -175,7 +176,7 @@ public class Main {
 		} catch (NumberFormatException e) {
 			System.out.println("This is not valid number");
 		}
-		switch(getStatus()) {
+		switch (getStatus()) {
 		case 1:
 			status = true;
 			break;
@@ -187,19 +188,20 @@ public class Main {
 			System.out.println("Try again");
 			selectOperation();
 		}
-		
-		return status;	
-		
+
+		return status;
+
 	}
-	
+
 	/**
 	 * encoded/decoded message postProcessing
 	 * 
 	 */
 	public void messagePostProcessing() {
-		
+
 		Scanner scan = new Scanner(System.in);
-		System.out.println("Would you like to:\n[1] - Print your encoded/decoded message.\n[2] - Save your encoded/decoded message to a file.\n[3] - Print and save"
+		System.out.println(
+				"Would you like to:\n[1] - Print your encoded/decoded message.\n[2] - Save your encoded/decoded message to a file.\n[3] - Print and save"
 						+ " your encoded/decoded message.");
 		try {
 			setStatus(Integer.parseInt(scan.next()));
@@ -209,43 +211,36 @@ public class Main {
 		switch (getStatus()) {
 		case 1:
 			System.out.println("YOUR ENCODED/DECODED MESSAGE");
-			System.out.println(getEncodedMessage());
+			System.out.println(getEncMessage());
 			break;
 		case 2:
-			new ReadWriteInputFile().writeEncodedString(getEncodedMessage());
+			new ReadWriteInputFile().writeEncodedString(getEncMessage());
 			break;
 		case 3:
 			System.out.println("YOUR ENCODED/DECODED MESSAGE");
-			System.out.println(getEncodedMessage());
-			new ReadWriteInputFile().writeEncodedString(getEncodedMessage());
+			System.out.println(getEncMessage());
+			new ReadWriteInputFile().writeEncodedString(getEncMessage());
 			break;
 		default:
 			System.out.println("You have 'literally three options: '1','2' or '3' ");
 			System.out.println("Try again");
-			messagePostProcessing() ;
+			messagePostProcessing();
 		}
-		
+
 	}
-	
-	
+
+	public void run() {
+		welcomeMessage();
+		selectInputMethod();
+		selectEncryptionMethod();
+		System.out.println("Message length: " + getMsg().length() + " chars");
+		messagePostProcessing();
+	}
+
 	
 	public static void main(String[] args) {
 		Main newTask = new Main();
-		newTask.welcomeMessage();
-		newTask.selectInputMethod();
-		
-		StringConversion newString = new StringConversion(newTask.getMsg());
-		
-		newTask.setConvertedMessage(newString.getMessageToCipher());
-		newTask.selectEncryptionMethod();
-		newTask.setEncodedMessage(newString.toUpperCase(newTask.getEncMessage()));
-		
-		System.out.println("Message length: " + newTask.getMsg().length() + " chars");
-		newTask.messagePostProcessing();
+		newTask.run();
 	}
-	
-	
-
-	
 
 }

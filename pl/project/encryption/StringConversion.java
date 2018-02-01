@@ -10,6 +10,10 @@ public class StringConversion {
 	public StringConversion(String inputMessage) {
 		toLowerCase(inputMessage);
 	}
+	
+	public StringConversion() {
+		
+	}
 
 	public char[] getMessageToCipher() {
 		return messageToCipher;
